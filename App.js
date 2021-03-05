@@ -1,29 +1,27 @@
 import { StatusBar } from 'expo-status-bar'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { getDecks, getDeck } from './utils/api'
+import DecksList from './components/DecksList'
+import Deck from './components/Deck'
+import AddDeck from './components/AddDeck'
+import DeckDetails from './components/DeckDetails'
+import AddCard from './components/AddCard'
+import Quiz from './components/Quiz'
+import APITest from './components/APITest'
 
 export default function App() {
-  const [data, setData] = useState('test')
-  useEffect(() => {
-    getDecks().then(result => {
-      console.log(result)
-      setData(result)
-    })
-  }, [])
   return (
-    <View style={styles.container}>
-      <Text>{JSON.stringify(data)}</Text>
+    <View style={{ flex: 1 }}>
+      {/* <Deck /> */}
+      {/* <DecksList /> */}
+      {/* <DeckDetails /> */}
       <StatusBar style='auto' />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  txt: {
+    color: 'red',
   },
 })
