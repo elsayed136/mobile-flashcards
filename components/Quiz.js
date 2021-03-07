@@ -1,22 +1,55 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { black, green, lightGray, red } from '../utils/colors'
+import { StyleSheet, Text, View, Button } from 'react-native'
+import { connect } from 'react-redux'
+
+import { black, green, lightPurp, red } from '../utils/colors'
 import TextButton from './common/TextButton'
 import TouchButton from './common/TouchButton'
 
-const QUESTION = 'QUESTION'
-const ANSWER = 'ANSWER'
-const RESULT = 'RESULT'
+const answer = {
+  CORRECT: 'CORRECT',
+  INCORRECT: 'INCORRECT',
+}
+const Quiz = ({ deck, navigation }) => {
+  const { length: questionsLength } = deck.questions
 
-const Quiz = () => {
-  const initialState = QUESTION
-  const [screen, setScreen] = useState(initialState)
-  if (screen === RESULT) {
+  const [isQuestion, setIsQuestion] = useState(true)
+  const [questionNumber, setQuestionNumber] = useState(0)
+  const [correct, setCorrect] = useState(0)
+  const [Incorrect, setIncorrect] = useState(0)
+
+  const handleAnswer = userAnswer => {
+    setQuestionNumber(questionNumber + 1)
+    setIsQuestion(true)
+    if (userAnswer === answer.CORRECT) {
+      setCorrect(correct + 1)
+    } else {
+      setIncorrect(Incorrect + 1)
+    }
+  }
+  const handleReset = () => {
+    setQuestionNumber(0)
+    setCorrect(0)
+    setIncorrect(0)
+    setIsQuestion(true)
+  }
+
+  if (questionsLength === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={[styles.count, { textAlign: 'center', padding: 5 }]}>
+          Sorry, You cannot take a quiz because there are no cards in the deck.
+        </Text>
+      </View>
+    )
+  }
+
+  if (questionNumber >= questionsLength) {
     return (
       <View
         style={[
           styles.container,
-          { justifyContent: 'center', alignItems: 'center' },
+          { justifyContent: 'space-around', alignItems: 'center' },
         ]}
       >
         <View>
@@ -26,11 +59,23 @@ const Quiz = () => {
           <Text style={[styles.count, { textAlign: 'center' }]}>
             Percentage correct
           </Text>
+          <Text style={{ color: 'red', fontSize: 46, textAlign: 'center' }}>
+            {((correct / questionsLength) * 100).toFixed()}%
+          </Text>
         </View>
         <View>
-          <Text style={{ color: 'red', fontSize: 46, textAlign: 'center' }}>
-            87%
-          </Text>
+          <TouchButton
+            btnStyle={{ backgroundColor: lightPurp, borderWidth: 0 }}
+            onPress={handleReset}
+          >
+            Reset Quiz
+          </TouchButton>
+          <TextButton
+            txtStyle={{ fontWeight: 'bold' }}
+            onPress={navigation.goBack}
+          >
+            Go to Deck
+          </TextButton>
         </View>
       </View>
     )
@@ -38,26 +83,28 @@ const Quiz = () => {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.count}>2 / 2</Text>
+        <Text style={styles.count}>
+          {questionNumber + 1} / {deck.questions.length}
+        </Text>
       </View>
       <View>
         <Text style={styles.h1}>
-          {screen === QUESTION
-            ? 'Does React Native work with Android?'
-            : 'Yes!'}
+          {isQuestion
+            ? deck.questions[questionNumber].question
+            : deck.questions[questionNumber].answer}
         </Text>
         <TextButton
           txtStyle={{ color: 'red', fontWeight: 'bold', fontSize: 16 }}
-          onPress={() => console.log('pressed')}
+          onPress={() => setIsQuestion(!isQuestion)}
         >
-          {screen === QUESTION ? 'Answer' : 'Question'}
+          {isQuestion ? 'Answer' : 'Question'}
         </TextButton>
       </View>
 
       <View>
         <TouchButton
           btnStyle={{ backgroundColor: green, borderColor: green }}
-          onPress={() => console.log('pressed')}
+          onPress={() => handleAnswer(answer.CORRECT)}
         >
           Correct
         </TouchButton>
@@ -66,7 +113,7 @@ const Quiz = () => {
             backgroundColor: red,
             borderColor: red,
           }}
-          onPress={() => console.log('pressed')}
+          onPress={() => handleAnswer(answer.INCORRECT)}
         >
           Incorrect
         </TouchButton>
@@ -74,8 +121,15 @@ const Quiz = () => {
     </View>
   )
 }
+const mapStateToProps = ({ decks }, { route }) => {
+  const deckId = route.params?.deckId ?? undefined
+  const deck = decks[deckId]
+  return {
+    deck,
+  }
+}
 
-export default Quiz
+export default connect(mapStateToProps)(Quiz)
 
 const styles = StyleSheet.create({
   container: {
@@ -86,7 +140,7 @@ const styles = StyleSheet.create({
   count: {
     fontSize: 24,
     color: black,
-    alignSelf: 'flex-start',
+    textAlign: 'left',
   },
   h1: {
     fontSize: 43,
