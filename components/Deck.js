@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { connect } from 'react-redux'
 
 import { black } from '../utils/colors'
 
@@ -18,8 +19,14 @@ const Deck = ({ deck }) => {
     </View>
   )
 }
+const mapStateToProps = ({ decks }, { deckId }) => {
+  const deck = decks[deckId]
+  return {
+    deck,
+  }
+}
 
-export default Deck
+export default connect(mapStateToProps)(Deck)
 
 const styles = StyleSheet.create({
   container: {
