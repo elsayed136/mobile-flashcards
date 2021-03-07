@@ -13,7 +13,7 @@ const DecksList = ({ navigation, decks, handleInitialData }) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('DeckDetails', { title: item.title })
+          navigation.navigate('DeckDetails', { title: item.title, item })
         }}
       >
         <Deck deck={item} />
