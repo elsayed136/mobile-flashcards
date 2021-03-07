@@ -20,7 +20,7 @@ const DeckDetails = ({ decks, deck, removeDeck, navigation }) => {
         <TouchButton
           btnStyle={{ backgroundColor: white }}
           txtStyle={{ color: black }}
-          onPress={() => navigation.navigate('AddCard')}
+          onPress={() => navigation.navigate('AddCard', { deckId: deck.title })}
         >
           Add Card
         </TouchButton>
