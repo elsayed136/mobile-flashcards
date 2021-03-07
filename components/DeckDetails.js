@@ -1,39 +1,39 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
-import { removeDeck } from '../actions'
+import { handleRemoveDeck } from '../actions'
 
 import Deck from './Deck'
 import TouchButton from './common/TouchButton'
 import TextButton from './common/TextButton'
 import { white, black, red } from '../utils/colors'
 
-const DeckDetails = ({ decks, deck, removeDeck, navigation }) => {
+const DeckDetails = ({ deckId, handleRemoveDeck, navigation }) => {
   const handleDeleteDeck = deckId => {
-    removeDeck(deckId)
+    handleRemoveDeck(deckId)
     navigation.goBack()
   }
   return (
     <View style={styles.container}>
-      <Deck deck={deck} />
+      <Deck deckId={deckId} />
       <View>
         <TouchButton
           btnStyle={{ backgroundColor: white }}
           txtStyle={{ color: black }}
-          onPress={() => navigation.navigate('AddCard', { deckId: deck.title })}
+          onPress={() => navigation.navigate('AddCard', { deckId })}
         >
           Add Card
         </TouchButton>
         <TouchButton
           btnStyle={{ backgroundColor: black }}
           txtStyle={{ color: white }}
-          onPress={() => navigation.navigate('Quiz', { deckId: deck.title })}
+          onPress={() => navigation.navigate('Quiz', { deckId })}
         >
           Start Quiz
         </TouchButton>
         <TextButton
           txtStyle={{ color: red }}
-          onPress={() => handleDeleteDeck(deck.title)}
+          onPress={() => handleDeleteDeck(deckId)}
         >
           Delete Deck
         </TextButton>
@@ -42,23 +42,17 @@ const DeckDetails = ({ decks, deck, removeDeck, navigation }) => {
   )
 }
 const mapStateToProps = ({ decks }, { route }) => {
-  const title = route.params.title
-  const deck = decks[title]
+  const { deckId } = route.params
 
   return {
-    decks,
-    deck,
+    deckId,
   }
 }
 
 const mapDispatchToProps = {
-  removeDeck,
+  handleRemoveDeck,
 }
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(React.memo(DeckDetails))
+export default connect(mapStateToProps, mapDispatchToProps)(DeckDetails)
 
 const styles = StyleSheet.create({
   container: {

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TextInput } from 'react-native'
+import { StyleSheet, View, TextInput } from 'react-native'
 import { connect } from 'react-redux'
-import { addCardToDeck } from '../actions'
+import { handleAddCardToDeck } from '../actions'
 
 import TouchButton from '../components/common/TouchButton'
-import { black, lightGray, white } from '../utils/colors'
+import { white } from '../utils/colors'
 
-const AddCard = ({ deckId, addCardToDeck, navigation }) => {
+const AddCard = ({ deckId, handleAddCardToDeck, navigation }) => {
   const initialState = {
     question: '',
     answer: '',
@@ -32,7 +32,7 @@ const AddCard = ({ deckId, addCardToDeck, navigation }) => {
   const handleSubmit = () => {
     if (!card.question.trim() || !card.answer.trim())
       return alert('Enter Question and Answer')
-    addCardToDeck(deckId, card)
+    handleAddCardToDeck(deckId, card)
     setCard(initialState)
     navigation.goBack()
   }
@@ -60,7 +60,7 @@ const AddCard = ({ deckId, addCardToDeck, navigation }) => {
 }
 
 const mapStateToProps = (state, { route }) => {
-  const deckId = route.params?.deckId ?? undefined
+  const { deckId } = route.params
 
   return {
     deckId,
@@ -68,7 +68,7 @@ const mapStateToProps = (state, { route }) => {
 }
 
 const mapDispatchToProps = {
-  addCardToDeck,
+  handleAddCardToDeck,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddCard)
