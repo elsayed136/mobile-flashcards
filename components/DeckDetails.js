@@ -5,10 +5,10 @@ import Deck from './Deck'
 import { white, black, red } from '../utils/colors'
 import TextButton from './common/TextButton'
 
-const DeckDetails = ({ navigation }) => {
+const DeckDetails = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
-      <Deck />
+      <Deck deck={route.params.item} />
       <View>
         <TouchButton
           btnStyle={{ backgroundColor: white }}
