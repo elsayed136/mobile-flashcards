@@ -3,10 +3,20 @@ import PropTypes from 'prop-types'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { white, black } from '../../utils/colors'
 
-const TouchButton = ({ children, onPress, btnStyle = {}, txtStyle = {} }) => {
+const TouchButton = ({
+  children,
+  onPress,
+  btnStyle = {},
+  txtStyle = {},
+  ...btnProps
+}) => {
   return (
     <View style={styles.btnContainer}>
-      <TouchableOpacity style={[styles.btn, btnStyle]} onPress={onPress}>
+      <TouchableOpacity
+        style={[styles.btn, btnStyle]}
+        onPress={onPress}
+        {...btnProps}
+      >
         <Text style={[styles.btnText, txtStyle]}>{children}</Text>
       </TouchableOpacity>
     </View>

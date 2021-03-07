@@ -1,32 +1,39 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import TouchButton from './common/TouchButton'
-import Deck from './Deck'
-import { white, black, red } from '../utils/colors'
-import TextButton from './common/TextButton'
+import { connect } from 'react-redux'
+import { handleRemoveDeck } from '../actions'
 
-const DeckDetails = ({ route, navigation }) => {
+import Deck from './Deck'
+import TouchButton from './common/TouchButton'
+import TextButton from './common/TextButton'
+import { white, black, red } from '../utils/colors'
+
+const DeckDetails = ({ deckId, handleRemoveDeck, navigation }) => {
+  const handleDeleteDeck = deckId => {
+    handleRemoveDeck(deckId)
+    navigation.goBack()
+  }
   return (
     <View style={styles.container}>
-      <Deck deck={route.params.item} />
+      <Deck deckId={deckId} />
       <View>
         <TouchButton
           btnStyle={{ backgroundColor: white }}
           txtStyle={{ color: black }}
-          onPress={() => navigation.navigate('AddCard')}
+          onPress={() => navigation.navigate('AddCard', { deckId })}
         >
           Add Card
         </TouchButton>
         <TouchButton
           btnStyle={{ backgroundColor: black }}
           txtStyle={{ color: white }}
-          onPress={() => navigation.navigate('Quiz')}
+          onPress={() => navigation.navigate('Quiz', { deckId })}
         >
           Start Quiz
         </TouchButton>
         <TextButton
           txtStyle={{ color: red }}
-          onPress={() => console.log('pressed')}
+          onPress={() => handleDeleteDeck(deckId)}
         >
           Delete Deck
         </TextButton>
@@ -34,8 +41,18 @@ const DeckDetails = ({ route, navigation }) => {
     </View>
   )
 }
+const mapStateToProps = ({ decks }, { route }) => {
+  const { deckId } = route.params
 
-export default DeckDetails
+  return {
+    deckId,
+  }
+}
+
+const mapDispatchToProps = {
+  handleRemoveDeck,
+}
+export default connect(mapStateToProps, mapDispatchToProps)(DeckDetails)
 
 const styles = StyleSheet.create({
   container: {

@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TextInput } from 'react-native'
-import TouchButton from '../components/common/TouchButton'
-import { black, lightGray, white } from '../utils/colors'
+import { StyleSheet, View, TextInput } from 'react-native'
+import { connect } from 'react-redux'
+import { handleAddCardToDeck } from '../actions'
 
-const AddCard = () => {
+import TouchButton from '../components/common/TouchButton'
+import { white } from '../utils/colors'
+
+const AddCard = ({ deckId, handleAddCardToDeck, navigation }) => {
   const initialState = {
     question: '',
     answer: '',
   }
-  const [card, setcard] = useState(initialState)
+  const [card, setCard] = useState(initialState)
 
   const handleQuestion = question => {
-    setcard(currentState => {
+    setCard(currentState => {
       return {
         ...currentState,
         question,
@@ -19,12 +22,19 @@ const AddCard = () => {
     })
   }
   const handleAnswer = answer => {
-    setcard(currentState => {
+    setCard(currentState => {
       return {
         ...currentState,
         answer,
       }
     })
+  }
+  const handleSubmit = () => {
+    if (!card.question.trim() || !card.answer.trim())
+      return alert('Enter Question and Answer')
+    handleAddCardToDeck(deckId, card)
+    setCard(initialState)
+    navigation.goBack()
   }
   return (
     <View style={styles.container}>
@@ -43,15 +53,25 @@ const AddCard = () => {
         />
       </View>
       <View>
-        <TouchButton onPress={() => console.log('card added')}>
-          Submit
-        </TouchButton>
+        <TouchButton onPress={handleSubmit}>Submit</TouchButton>
       </View>
     </View>
   )
 }
 
-export default AddCard
+const mapStateToProps = (state, { route }) => {
+  const { deckId } = route.params
+
+  return {
+    deckId,
+  }
+}
+
+const mapDispatchToProps = {
+  handleAddCardToDeck,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCard)
 
 const styles = StyleSheet.create({
   container: {

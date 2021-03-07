@@ -1,14 +1,25 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput } from 'react-native'
-import { black, lightGray, white } from '../utils/colors'
+import { connect } from 'react-redux'
+import { handleAddDeck } from '../actions'
+import { black, white } from '../utils/colors'
 import TouchButton from './common/TouchButton'
 
-const AddDeck = () => {
+const AddDeck = ({ navigation, handleAddDeck }) => {
   const initialState = ''
   const [deckTitle, setDeckTitle] = useState(initialState)
 
   const handleDeckTitle = title => {
     setDeckTitle(title)
+  }
+  const handleCreateDeck = () => {
+    if (!deckTitle.trim()) {
+      alert('Enter A Title')
+    } else {
+      handleAddDeck(deckTitle)
+      setDeckTitle('')
+      navigation.goBack()
+    }
   }
   return (
     <View style={styles.container}>
@@ -22,15 +33,19 @@ const AddDeck = () => {
         />
       </View>
       <View>
-        <TouchButton onPress={() => console.log('deck added')}>
-          Create Deck
-        </TouchButton>
+        <TouchButton onPress={handleCreateDeck}>Create Deck</TouchButton>
       </View>
     </View>
   )
 }
 
-export default AddDeck
+const mapStateToProps = null
+
+const mapDispatchToProps = {
+  handleAddDeck,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddDeck)
 
 const styles = StyleSheet.create({
   container: {
