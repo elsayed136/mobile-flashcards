@@ -27,7 +27,7 @@ const DeckDetails = ({ decks, deck, removeDeck, navigation }) => {
         <TouchButton
           btnStyle={{ backgroundColor: black }}
           txtStyle={{ color: white }}
-          onPress={() => navigation.navigate('Quiz')}
+          onPress={() => navigation.navigate('Quiz', { deckId: deck.title })}
         >
           Start Quiz
         </TouchButton>
