@@ -1,13 +1,16 @@
-import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { View } from 'react-native'
-import Quiz from './components/Quiz'
+import CustomStatusBar from './components/common/CustomStatusBar'
+import Navigator from './navigation'
+import { lightGray } from './utils/colors'
 
-export default function App() {
+const App = () => {
   return (
     <View style={{ flex: 1 }}>
-      <Quiz />
-      <StatusBar style='auto' />
+      <CustomStatusBar backgroundColor={lightGray} barStyle='light-content' />
+      <Navigator />
     </View>
   )
 }
+
+export default App

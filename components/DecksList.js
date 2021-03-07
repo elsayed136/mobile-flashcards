@@ -1,14 +1,50 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View, TouchableOpacity, ScrollView } from 'react-native'
 import Deck from './Deck'
 
-const DecksList = () => {
+const DecksList = ({ navigation }) => {
   return (
-    <View>
-      <Deck />
-      <Deck />
-      <Deck />
-    </View>
+    <ScrollView>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('DeckDetails', {
+            title: 'Deck1',
+          })
+        }
+      >
+        <Deck />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('DeckDetails')}>
+        <Deck />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('DeckDetails', {
+            title: 'Deck3',
+          })
+        }
+      >
+        <Deck />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('DeckDetails', {
+            title: 'Deck4',
+          })
+        }
+      >
+        <Deck />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('DeckDetails', {
+            title: 'Deck5',
+          })
+        }
+      >
+        <Deck />
+      </TouchableOpacity>
+    </ScrollView>
   )
 }
 

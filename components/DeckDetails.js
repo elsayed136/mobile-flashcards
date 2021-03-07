@@ -5,7 +5,7 @@ import Deck from './Deck'
 import { white, black, red } from '../utils/colors'
 import TextButton from './common/TextButton'
 
-const DeckDetails = () => {
+const DeckDetails = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Deck />
@@ -13,14 +13,14 @@ const DeckDetails = () => {
         <TouchButton
           btnStyle={{ backgroundColor: white }}
           txtStyle={{ color: black }}
-          onPress={() => console.log('pressed')}
+          onPress={() => navigation.navigate('AddCard')}
         >
           Add Card
         </TouchButton>
         <TouchButton
           btnStyle={{ backgroundColor: black }}
           txtStyle={{ color: white }}
-          onPress={() => console.log('pressed')}
+          onPress={() => navigation.navigate('Quiz')}
         >
           Start Quiz
         </TouchButton>
