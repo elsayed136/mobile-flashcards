@@ -1,51 +1,40 @@
-import React from 'react'
-import { View, TouchableOpacity, ScrollView } from 'react-native'
+import React, { useEffect } from 'react'
+import { View, TouchableOpacity, ScrollView, FlatList } from 'react-native'
+import { connect } from 'react-redux'
 import Deck from './Deck'
 
-const DecksList = ({ navigation }) => {
+import { handleInitialData } from '../actions'
+
+const DecksList = ({ navigation, decks, handleInitialData }) => {
+  useEffect(() => {
+    handleInitialData()
+  }, [])
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('DeckDetails', { title: item.title })
+        }}
+      >
+        <Deck deck={item} />
+      </TouchableOpacity>
+    )
+  }
   return (
-    <ScrollView>
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('DeckDetails', {
-            title: 'Deck1',
-          })
-        }
-      >
-        <Deck />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('DeckDetails')}>
-        <Deck />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('DeckDetails', {
-            title: 'Deck3',
-          })
-        }
-      >
-        <Deck />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('DeckDetails', {
-            title: 'Deck4',
-          })
-        }
-      >
-        <Deck />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('DeckDetails', {
-            title: 'Deck5',
-          })
-        }
-      >
-        <Deck />
-      </TouchableOpacity>
-    </ScrollView>
+    <View>
+      <FlatList
+        data={Object.values(decks)}
+        renderItem={renderItem}
+        keyExtractor={item => item.title}
+      />
+    </View>
   )
 }
 
-export default DecksList
+const mapStateToProps = ({ decks }) => ({ decks })
+
+const mapDispatchToProps = {
+  handleInitialData,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DecksList)
