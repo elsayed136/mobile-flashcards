@@ -21,10 +21,10 @@ export function addDeck(title) {
   }
 }
 
-export function removeDeck(id) {
+export function removeDeck(deckId) {
   return {
     type: REMOVE_DECK,
-    id,
+    deckId,
   }
 }
 

@@ -8,27 +8,23 @@ export default function decks(state = {}, action) {
         ...action.decks,
       }
     case ADD_DECK:
-      const { title } = action
       return {
         ...state,
-        [title]: {
-          title,
+        [action.title]: {
+          title: action.title,
           questions: [],
         },
       }
     case REMOVE_DECK:
-      const { id } = action
-      // return ({ [id]: value, ...remainingDecks } = state);
-      const { [id]: value, ...remainingDecks } = state
+      const { [action.deckId]: value, ...remainingDecks } = state
       console.log(remainingDecks)
       return remainingDecks
     case ADD_CARD:
-      const { deckId, card } = action
       return {
         ...state,
-        [deckId]: {
-          ...state[deckId],
-          questions: [...state[deckId].questions].concat(card),
+        [action.deckId]: {
+          ...state[action.deckId],
+          questions: [...state[action.deckId].questions].concat(action.card),
         },
       }
     default:

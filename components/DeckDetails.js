@@ -1,14 +1,21 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import TouchButton from './common/TouchButton'
-import Deck from './Deck'
-import { white, black, red } from '../utils/colors'
-import TextButton from './common/TextButton'
+import { connect } from 'react-redux'
+import { removeDeck } from '../actions'
 
-const DeckDetails = ({ route, navigation }) => {
+import Deck from './Deck'
+import TouchButton from './common/TouchButton'
+import TextButton from './common/TextButton'
+import { white, black, red } from '../utils/colors'
+
+const DeckDetails = ({ decks, deck, removeDeck, navigation }) => {
+  const handleDeleteDeck = deckId => {
+    removeDeck(deckId)
+    navigation.goBack()
+  }
   return (
     <View style={styles.container}>
-      <Deck deck={route.params.item} />
+      <Deck deck={deck} />
       <View>
         <TouchButton
           btnStyle={{ backgroundColor: white }}
@@ -26,7 +33,7 @@ const DeckDetails = ({ route, navigation }) => {
         </TouchButton>
         <TextButton
           txtStyle={{ color: red }}
-          onPress={() => console.log('pressed')}
+          onPress={() => handleDeleteDeck(deck.title)}
         >
           Delete Deck
         </TextButton>
@@ -34,8 +41,24 @@ const DeckDetails = ({ route, navigation }) => {
     </View>
   )
 }
+const mapStateToProps = ({ decks }, { route }) => {
+  const title = route.params.title
+  const deck = decks[title]
 
-export default DeckDetails
+  return {
+    decks,
+    deck,
+  }
+}
+
+const mapDispatchToProps = {
+  removeDeck,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(React.memo(DeckDetails))
 
 const styles = StyleSheet.create({
   container: {
