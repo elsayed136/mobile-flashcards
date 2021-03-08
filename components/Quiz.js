@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Button } from 'react-native'
 import { connect } from 'react-redux'
 
 import { black, green, lightPurp, red } from '../utils/colors'
 import TextButton from './common/TextButton'
 import TouchButton from './common/TouchButton'
+
+import { clearLocalNotification, setLocalNotification } from '../utils/helper'
 
 const answer = {
   CORRECT: 'CORRECT',
@@ -17,6 +19,10 @@ const Quiz = ({ deck, navigation }) => {
   const [questionNumber, setQuestionNumber] = useState(0)
   const [correct, setCorrect] = useState(0)
   const [Incorrect, setIncorrect] = useState(0)
+
+  useEffect(() => {
+    clearLocalNotification().then(setLocalNotification)
+  }, [])
 
   const handleAnswer = userAnswer => {
     setQuestionNumber(questionNumber + 1)
